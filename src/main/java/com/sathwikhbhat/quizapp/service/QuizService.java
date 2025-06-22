@@ -3,6 +3,7 @@ package com.sathwikhbhat.quizapp.service;
 import com.sathwikhbhat.quizapp.entity.Question;
 import com.sathwikhbhat.quizapp.entity.QuestionWrapper;
 import com.sathwikhbhat.quizapp.entity.Quiz;
+import com.sathwikhbhat.quizapp.entity.Response;
 import com.sathwikhbhat.quizapp.repository.QuestionsRepository;
 import com.sathwikhbhat.quizapp.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,20 @@ public class QuizService {
             questionsForUser.add(qw);
         }
         return questionsForUser;
+    }
+
+    public int calculateResult(Integer id, List<Response> responses) {
+        Quiz quiz = quizRepository.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int score = 0;
+        int i=0;
+
+        for (Response r : responses) {
+            if (r.getAnswer().equals(questions.get(i).getRightAnswer()))
+                score++;
+            i++;
+        }
+
+        return score;
     }
 }

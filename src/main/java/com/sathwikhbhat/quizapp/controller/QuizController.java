@@ -1,6 +1,7 @@
 package com.sathwikhbhat.quizapp.controller;
 
 import com.sathwikhbhat.quizapp.entity.QuestionWrapper;
+import com.sathwikhbhat.quizapp.entity.Response;
 import com.sathwikhbhat.quizapp.service.QuizService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -32,5 +33,12 @@ public class QuizController {
     public ResponseEntity<?> getQuiz(@PathVariable Integer id) {
         List<QuestionWrapper> quizQuestions = quizService.getQuizQuestions(id);
         return new ResponseEntity<>(quizQuestions, HttpStatus.OK);
+    }
+
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<?> submitQuiz(@PathVariable Integer id,
+                                        @RequestBody List<Response> responses) {
+        int score = quizService.calculateResult(id, responses);
+        return new ResponseEntity<>(score, HttpStatus.OK);
     }
 }
